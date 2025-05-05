@@ -24,8 +24,8 @@ header {
     border-radius: 10px;
     padding: 1rem;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 900px;
-    height: 900px;
+    width: min-content;
+    height: min-content;
 }
 
 #notaChart{
@@ -34,6 +34,16 @@ header {
 }
 
 #nota {
-    width: 500px;
-    height: 500px;
+    width: 700px;
+    height: 700px;
+}
+
+#linechart {
+    width: 700px;
+    height: 700px;
+}
+
+#barchart {
+    width: 700px;
+    height: 700px;
 }

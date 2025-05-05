@@ -1,4 +1,6 @@
 import { PieChart } from '../../src/charts/PieChart.js';
+import { BarChart } from '../../src/charts/BarChart.js';
+import { LineChart } from '../../src/charts/LineChart.js';
 
 document.addEventListener("DOMContentLoaded", () => {
     const title = "Vendas por Categoria";
@@ -9,10 +11,17 @@ document.addEventListener("DOMContentLoaded", () => {
         ["Sobremesas", 100],
     ];
     
-    // Criando e renderizando o gráfico
+    // Criando e renderizando o gráfico de Pizza
     const pie = new PieChart("nota", title, columns, datas);
     pie.createChart();
-
+    
+    // Criando e rederizando o grafico de Linha
+    const line = new LineChart("linechart", title, columns, datas);
+    line.createChart();
+    
+    // Criando e rederizando o grafico de Barra
+    const bar = new BarChart("barchart", title, columns, datas);
+    bar.createChart();
 });
 
 async function fetchData() { //receber os dados e retornar em formato json
@@ -28,9 +37,9 @@ function prepareNotaData(atendimentos) {
     }, {});
 
      // Transforma o objeto em array de arrays: [["ótimo", 3], ["bom", 2], ...]
-     const datas = Object.entries(notas);
+        const datas = Object.entries(notas);
 
-     return datas;
+        return datas;
 }
 
 

@@ -54,5 +54,11 @@ export class PieChart {
 
         this.chart.setOption(options);
     }
+
+    //Método para atualizar os dados dinamicamente
+    updateChart(newDatas) {
+        this.datas = newDatas;
+        this.createChart();
+    }
 }
 
