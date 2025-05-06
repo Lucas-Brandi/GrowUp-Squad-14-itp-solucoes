@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 async function fetchData() { //receber os dados e retornar em formato json
-    const response = await fetch('../../src/data/data.json'); //recebendo os dados do servidor (por meio de promises)
+    const response = await fetch('/api/data'); //recebendo os dados do servidor (por meio de promises)
     const data = await response.json(); 
     return data;
 }
