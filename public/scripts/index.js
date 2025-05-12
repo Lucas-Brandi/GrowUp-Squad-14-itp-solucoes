@@ -1,6 +1,6 @@
-import { PieChart } from '../../src/charts/PieChart.js';
-import { BarChart } from '../../src/charts/BarChart.js';
-import { LineChart } from '../../src/charts/LineChart.js';
+import { PieChart } from '../scripts/charts/PieChart.js'; // Importando o gráfico de Pizza
+import { BarChart } from '../scripts/charts/BarChart.js'; // Importando o gráfico de Barra
+import { LineChart } from '../scripts/charts/LineChart.js'; // Importando o gráfico de Linha
 
 document.addEventListener("DOMContentLoaded", () => {
     const title = "Vendas por Categoria";
