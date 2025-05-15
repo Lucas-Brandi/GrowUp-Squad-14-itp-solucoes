@@ -1,0 +1,29 @@
+{
+  "name": "s14-dashboard",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src/server/app.js",
+    "start": "node src/server/app.js",
+    "install": "npm i"
+  },
+  "keywords": [
+    "dashboard",
+    "charts",
+    "ITP Soluções",
+    "Squad 14",
+    "Residência II - 2025.1",
+    "Unit",
+    "Porto Digital"
+  ],
+  "author": "Squad 14 (2025.1)",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "echarts": "^5.6.0",
+    "express": "^5.1.0"
+  }
+}
