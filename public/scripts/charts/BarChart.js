@@ -1,17 +1,9 @@
-export class BarChart {
-    constructor(elementId, title, columns, datas) {
-    this.elementId = elementId;
-    this.title = title;
-    this.columns = columns;
-    this.datas = datas;
-    this.chart = echarts.init(document.getElementById(this.elementId));
-    }
+export async function createBarChart(elementId, title, columns, datas) {
+    const chart = echarts.init(document.getElementById(elementId));
 
-  //Método para criar o gráfico
-    createChart() {
-        const options = {
+    const options = {
         title: {
-            text: this.title,
+            text: title,
             left: "center",
             textStyle: {
                 fontSize: 18,
@@ -22,30 +14,44 @@ export class BarChart {
             trigger: "item",
             axisPointer: { type: "shadow" },
         },
+        grid: {
+            bottom: 100,
+            left: 100
+        },
         xAxis: {
             type: "category",
-            data: this.datas.map((item) => item[0]),
+            data: datas.map((item) => item[0]),
             axisLabel: {
+                rotate: 45,
+                interval: 0,
                 textStyle: {
-                fontSize: 15 // 👈 tamanho da fonte dos rótulos do eixo Y
+                    fontSize: 12
                 }
             }
         },
         yAxis: { type: "value" },
-        series: this.columns.slice(1).map((column, index) => ({
+        series: columns.slice(1).map((column, index) => ({
             name: column,
             type: "bar",
-            data: this.datas.map((item) => item[index + 1]),
+            data: datas.map((item) => item[index + 1]),
             label: { show: true, position: "top" },
         })),
-        };
+    };
 
-        this.chart.setOption(options);
-    }
+    chart.setOption(options);
 
-    //Método para atualizar os dados dinamicamente
-    updateChart(newDatas) {
-        this.datas = newDatas;
-        this.createChart();
-    }
+    // Envia os dados para o backend (exemplo simples com fetch)
+    // try {
+    //     await fetch('https://seu-backend.com/api/graficos', {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json'
+    //         },
+    //         body: JSON.stringify({ title, columns, datas })
+    //     });
+    // } catch (error) {
+    //     console.error("Erro ao salvar gráfico no banco:", error);
+    // }
+
+    return chart;
 }
