@@ -28,22 +28,27 @@ header {
     height: min-content;
 }
 
-#notaChart{
-    width: 400px;
+#noteServiceChart{
+    width: 500px;
     height: 400px;
 }
 
 #frequenciaClientes {
-    width: 400px;
+    width: 500px;
     height: 400px;
 }
 
 #preparePrioridadeData {
-    width: 400px;
+    width: 500px;
     height: 400px;
 }
 
 #barchart {
     width: 700px;
     height: 700px;
+}
+
+#donutChart {
+    width: 500px;
+    height: 400px;
 }
