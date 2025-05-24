@@ -5,7 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard - Monitoramento de Atendimentos</title>
     <link rel="stylesheet" href="./styles/style.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css"
+    />
   </head>
   <body>
     <header>
@@ -13,20 +19,34 @@
     </header>
 
     <main class="dashboard">
-        <section class="chart-container">
-          <div id="noteServiceChart"></div>
-          <div id="interaction-output"></div>
-        </section>
-        <section class="chart-container">
-          <div id="frequenciaClientes"></div>
-        </section>
-        <section class="chart-container">
-          <div id="preparePrioridadeData"></div>
-        </section>
-        <section class="chart-container">
-          <div id="donutChart"></div>
-        </section>      
-        
+      <section class="chart-container">
+        <div id="noteServiceChart"></div>
+        <!-- <input type="file" id="arquivojson" accept=".json"> -->
+      </section>
+      <section class="chart-container">
+        <table id="tabelaAtendimentos" class="display" style="width: 500px; height: 400px;">
+          <thead>
+            <tr>
+              <th>Código de atendimento:</th>
+              <th>Cliente:</th>
+              <th>Serviço:</th>
+              <th>Atendente:</th>
+              <th>Nota:</th>
+              <th>Interações:</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+      <section class="chart-container">
+        <div id="frequenciaClientes"></div>
+      </section>
+      <section class="chart-container">
+        <div id="preparePrioridadeData"></div>
+      </section>
+      <section class="chart-container">
+        <div id="donutChart"></div>
+      </section>
     </main>
 
     <script type="module" src="./scripts/index.js"></script>

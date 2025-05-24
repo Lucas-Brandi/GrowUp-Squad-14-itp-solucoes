@@ -39,3 +39,71 @@ export function preparePrioridadeData() {
     const datas = Object.entries(prioridades);
     return datas;
 }
+
+
+export function createDataTable(){
+    try {
+        const rawDatas = dados;
+        
+        // Filtra e mapeia os dados conforme desejado
+        const filteredDatas = rawDatas.map(item => ({
+                codigo_atendimento: item.codigo_atendimento,
+                cliente: item.cliente,
+                servico: item.servico,
+                atendente: item.atendente,
+                nota: item.nota,
+                interacoes: item.interacoes
+            }));
+
+        $('#tabelaAtendimentos').DataTable({
+        data: filteredDatas,
+        columns: [
+            { data: 'codigo_atendimento' },
+            { data: 'cliente' },
+            { data: 'servico' },
+            { data: 'atendente' },
+            { data: 'nota' },
+            { data: 'interacoes' }
+        ],
+        language: {
+            url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/pt-BR.json'
+        }
+        });
+
+    } catch (error) {
+        alert('Erro ao carregar dados: ' + error.message);
+    } 
+}
+
+export function atualizarTabelaPorNota(nota) {
+    const rawDatas = dados;
+    const filtrado = rawDatas
+        .filter((item) => item.nota === nota)
+        .map((item) => ({
+            codigo_atendimento: item.codigo_atendimento,
+            cliente: item.cliente,
+            servico: item.servico,
+            atendente: item.atendente,
+            nota: item.nota,
+            interacoes: item.interacoes
+        }));
+
+    if ($.fn.DataTable.isDataTable('#tabelaAtendimentos')) {
+        $('#tabelaAtendimentos').DataTable().clear().rows.add(filtrado).draw();
+    } else {
+        $('#tabelaAtendimentos').DataTable({
+            data: filtrado,
+            columns: [
+                { data: "codigo_atendimento", title: "Código" },
+                { data: "cliente", title: "Cliente" },
+                { data: "servico", title: "Serviço" },
+                { data: "atendente", title: "Atendente" },
+                { data: 'nota', title: "Nota" },
+                { data: "interacoes", title: "Interações" },
+            ],
+            language: {
+                url: "https://cdn.datatables.net/plug-ins/1.13.6/i18n/pt-BR.json",
+            },
+        });
+    }
+}

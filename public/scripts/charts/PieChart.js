@@ -1,3 +1,5 @@
+import { atualizarTabelaPorNota } from '../manipulaDados.js';
+
 export async function createPieChart(elementId, title, columns, datas) {
     const chart = echarts.init(document.getElementById(elementId));
 
@@ -48,15 +50,20 @@ export async function createPieChart(elementId, title, columns, datas) {
 
     chart.setOption(options);
 
-    // 🔴 Evento de clique
-    chart.on('click', function (params) {
-        const container = document.getElementById('interaction-output');
-        if (!document.getElementById(`info-${params.name}`)) {
-          const p = document.createElement('p');
-          p.id = `info-${params.name}`;
-          p.textContent = `Você clicou em: ${params.name} (${params.value})`;
-          container.appendChild(p);
-        }
+    // //  Evento de clique
+    // chart.on('click', function (params) {
+    //     const container = document.getElementById('interaction-output');
+    //     if (!document.getElementById(`info-${params.name}`)) {
+    //       const p = document.createElement('p');
+    //       p.id = `info-${params.name}`;
+    //       p.textContent = `Você clicou em: ${params.name} (${params.value})`;
+    //       container.appendChild(p);
+    //     }
+    // });
+
+    chart.on("click", function (params) {
+      const notaSelecionada = params.name;
+      atualizarTabelaPorNota(notaSelecionada);
     });
 
     return chart;
