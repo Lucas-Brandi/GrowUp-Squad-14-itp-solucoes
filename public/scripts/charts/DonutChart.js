@@ -1,58 +1,61 @@
-export async function createDonutChart(elementId, title, columns, datas) {
-    const chart = echarts.init(document.getElementById(elementId));
+export function createDonutChart(elementId, chartTitle, columns, chartData) {
+    const chartElement = document.getElementById(elementId);
+    if (!chartElement) {
+        console.error(`[createDonutChart] Elemento HTML com ID '${elementId}' não encontrado.`);
+        return null;
+    }
+    const chart = echarts.init(chartElement);
 
+    const donutData = chartData[0] && typeof chartData[0].name !== 'undefined' && typeof chartData[0].value !== 'undefined'
+        ? chartData 
+        : chartData.map((item) => ({ name: item[0], value: item[1] })); 
     const options = {
         title: {
-            text: title,
-            left: 'center',
-            textStyle: {
-                fontSize: 18,
-                fontWeight: 'bold',
-            },
+            text: chartTitle,
+            left: "center",
+            textStyle: { fontSize: 18, fontWeight: "bold" }
         },
         tooltip: {
-            trigger: 'item',
-            textStyle: {
-                fontSize: 14,
-            },
+            trigger: "item",
+            formatter: '{a} <br/>{b}: {c} ({d}%)'
         },
         legend: {
             orient: 'vertical',
-            left: 'left',
-            textStyle: {
-                fontSize: 14,
-            },
+            right: 10,
+            top: 'center',
+            type: 'scroll' 
         },
         series: [
             {
-                name: columns[1], 
+                name: columns && columns.length > 1 ? columns[1] : chartTitle,
                 type: 'pie',
-                radius: ['40%', '70%'], 
+                radius: ['40%', '65%'], 
                 avoidLabelOverlap: false,
                 label: {
                     show: true,
-                    position: 'inside',
-                    fontSize: 14,
+                    formatter: '{b}\n{d}%', 
                 },
                 emphasis: {
-                    label: {
+                    label: { 
                         show: true,
-                        fontSize: 18,
+                        fontSize: '16', 
                         fontWeight: 'bold'
+                    },
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: "rgba(0, 0, 0, 0.5)",
                     }
                 },
                 labelLine: {
-                    show: false
+                    show: true
                 },
-                data: datas.map((item) => ({
-                    name: item[0],
-                    value: item[1]
-                })),
+                data: donutData 
+                
             }
         ]
     };
 
     chart.setOption(options);
-
     return chart;
 }

@@ -1,9 +1,14 @@
-export async function createBarChart(elementId, title, columns, datas) {
-    const chart = echarts.init(document.getElementById(elementId));
+export function createBarChart(elementId, chartTitle, columns, chartData) {
+    const chartElement = document.getElementById(elementId);
+    if (!chartElement) {
+        console.error(`[createBarChart] Elemento HTML com ID '${elementId}' não encontrado.`);
+        return null; // Retorna null se o elemento não for encontrado
+    }
+    const chart = echarts.init(chartElement);
 
     const options = {
         title: {
-            text: title,
+            text: chartTitle,
             left: "center",
             textStyle: {
                 fontSize: 18,
@@ -11,47 +16,41 @@ export async function createBarChart(elementId, title, columns, datas) {
             },
         },
         tooltip: {
-            trigger: "item",
+            trigger: "axis", 
             axisPointer: { type: "shadow" },
         },
-        grid: {
-            bottom: 100,
-            left: 100
+        grid: { // Ajuste a grade para melhor visualização dos labels do eixo X
+            left: '3%',
+            right: '4%',
+            bottom: '15%', // Aumentado para dar espaço para labels rotacionados
+            containLabel: true
         },
         xAxis: {
             type: "category",
-            data: datas.map((item) => item[0]),
+            data: chartData.map((item) => item[0]), 
             axisLabel: {
                 rotate: 45,
-                interval: 0,
+                interval: 0, 
                 textStyle: {
                     fontSize: 12
                 }
             }
         },
-        yAxis: { type: "value" },
-        series: columns.slice(1).map((column, index) => ({
-            name: column,
-            type: "bar",
-            data: datas.map((item) => item[index + 1]),
-            label: { show: true, position: "top" },
+        yAxis: {
+            type: "value",
+            name: columns && columns.length > 1 ? columns[1] : 'Valor' 
+        },
+        series: (columns && columns.length > 1 ? columns.slice(1) : ['']) 
+            .map((columnName, index) => ({
+                name: columnName || (columns && columns.length === 1 ? columns[0] : chartTitle),
+                type: "bar",
+                barWidth: '60%', 
+                data: chartData.map((item) => item[index + 1]), 
+                label: { show: true, position: "top" }, // Mostrar valor no topo da barra
         })),
     };
 
     chart.setOption(options);
 
-    // Envia os dados para o backend (exemplo simples com fetch)
-    // try {
-    //     await fetch('https://seu-backend.com/api/graficos', {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json'
-    //         },
-    //         body: JSON.stringify({ title, columns, datas })
-    //     });
-    // } catch (error) {
-    //     console.error("Erro ao salvar gráfico no banco:", error);
-    // }
-
-    return chart;
+    return chart; 
 }
