@@ -1,70 +1,50 @@
-import { atualizarTabelaPorNota } from '../manipulaDados.js';
-
-export async function createPieChart(elementId, title, columns, datas) {
-    const chart = echarts.init(document.getElementById(elementId));
+export function createPieChart(elementId, chartTitle, columns, chartData) {
+    const chartElement = document.getElementById(elementId);
+    if (!chartElement) {
+        console.error(`[createPieChart] Elemento HTML com ID '${elementId}' não encontrado.`);
+        return null;
+    }
+    const chart = echarts.init(chartElement);
+    const pieData = chartData[0] && typeof chartData[0].name !== 'undefined' && typeof chartData[0].value !== 'undefined'
+        ? chartData 
+        : chartData.map((item) => ({ name: item[0], value: item[1] })); 
 
     const options = {
         title: {
-            text: title,
+            text: chartTitle,
             left: "center",
-            textStyle: {
-                fontSize: 18,
-                fontWeight: "bold",
-            },
-        },       
-
+            textStyle: { fontSize: 18, fontWeight: "bold" }
+        },
         tooltip: {
             trigger: "item",
-            textStyle: {
-                fontSize: 18,
-                fontWeight: "bold",
-            },
+            formatter: '{a} <br/>{b}: {c} ({d}%)' // {a} = series name, {b} = data name, {c} = value, {d} = percentage
         },
-
-      legend: {
-        orient: "vertical",
-        left: "right",
-        top: "bottom",
-        textStyle: {
-          fontSize: 18,
-          fontWeight: "bold",
+        legend: {
+            orient: "vertical",
+            right: 10,
+            top: "center",
+            type: 'scroll' 
         },
-      },
-      
-      series: [
-        {
-          name: columns[1],
-          type: "pie",
-          radius: "50%",
-          data: datas.map((item) => ({ name: item[0], value: item[1] })),
-          emphasis: {
-            itemStyle: {
-                shadowBlur: 10,
-                shadowOffsetX: 0,
-                shadowColor: "rgba(0, 0, 0, 0.5)",
-              },
+        series: [{
+            name: columns && columns.length > 1 ? columns[1] : chartTitle, 
+            type: "pie",
+            radius: "60%", 
+            center: ['50%', '55%'], 
+            data: pieData, 
+            emphasis: {
+                itemStyle: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: "rgba(0, 0, 0, 0.5)"
+                }
             },
-          },
-        ],
+            label: {
+                show: true,
+                formatter: '{b}: {d}%', // Mostra nome da categoria e porcentagem
+                fontSize: 12
+            },
+        }],
     };
-
     chart.setOption(options);
-
-    // //  Evento de clique
-    // chart.on('click', function (params) {
-    //     const container = document.getElementById('interaction-output');
-    //     if (!document.getElementById(`info-${params.name}`)) {
-    //       const p = document.createElement('p');
-    //       p.id = `info-${params.name}`;
-    //       p.textContent = `Você clicou em: ${params.name} (${params.value})`;
-    //       container.appendChild(p);
-    //     }
-    // });
-
-    chart.on("click", function (params) {
-      const notaSelecionada = params.name;
-      atualizarTabelaPorNota(notaSelecionada);
-    });
-
     return chart;
-};
+}
