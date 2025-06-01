@@ -1,49 +1,62 @@
-export class LineChart {
-    constructor(elementId, title, columns, datas) {
-        this.elementId = elementId;
-        this.title = title;
-        this.columns = columns;
-        this.datas = datas;
-        this.chart = echarts.init(document.getElementById(this.elementId));
+export function createLineChart(elementId, chartTitle, columns, chartData) {
+    const chartElement = document.getElementById(elementId);
+    if (!chartElement) {
+        console.error(`[createLineChart] Elemento HTML com ID '${elementId}' não encontrado.`);
+        return null;
     }
+    const chart = echarts.init(chartElement);
 
-    createChart() {
-        const options = {
-            title: {
-                text: this.title,
-                left: "center",
+    const options = {
+        title: {
+            text: chartTitle,
+            left: "center",
+            textStyle: {
+                fontSize: 18,
+                fontWeight: 'bold',
+            },
+        },
+        tooltip: {
+            trigger: 'axis' 
+        },
+        legend: { // Adicionar legenda se houver múltiplas séries
+            data: columns && columns.length > 1 ? columns.slice(1) : [],
+            bottom: 10, // Posição da legenda
+            type: 'scroll' // Permite scroll se muitos itens na legenda
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '15%', // Espaço para labels do eixo X e legenda
+            containLabel: true
+        },
+        xAxis: {
+            type: "category",
+            boundaryGap: false, 
+            data: chartData.map((item) => item[0]), 
+            axisLabel: {
+                rotate: 45,
+                interval: 0,
                 textStyle: {
-                    fontSize: 18,
-                    fontWeight: 'bold',
-                },
-            },
-            tooltip: {},
-            xAxis: {
-                type: "category",
-                data: this.datas.map((item) => item[0]),
-                axisLabel: {
-                    textStyle: {
-                        fontSize: 18,
-                        fontWeight: 'bold',
-                    }
+                    fontSize: 12, 
                 }
-            },
-            yAxis: { type: "value" },
-            series: this.columns.slice(1).map((column, index) => ({
-                name: column,
+            }
+        },
+        yAxis: {
+            type: "value",
+            name: "Valores" 
+        },
+        series: (columns && columns.length > 1 ? columns.slice(1) : [''])
+            .map((columnName, index) => ({
+                name: columnName || (columns && columns.length === 1 ? columns[0] : chartTitle), // Nome da série
                 type: "line",
-                data: this.datas.map((item) => item[index + 1]),
-                label: { show: true, position: "top" },
-            })),
-            };
+                smooth: true, 
+                data: chartData.map((item) => item[index + 1]), 
+                label: { show: false, position: "top" }, 
+                
+        })),
+    };
 
-        this.chart.setOption(options);
-    }
+    chart.setOption(options);
 
-    //Método para atualizar os dados dinamicamente
-    updateChart(newDatas) {
-        this.datas = newDatas;
-        this.createChart();
-    }
-
+    return chart; 
 }

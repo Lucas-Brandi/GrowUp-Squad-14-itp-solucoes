@@ -1,31 +1,26 @@
-// import * as echarts from 'echarts';
+import { atualizarTabelaPorNota } from '../manipulaDados.js';
 
-export class PieChart {
-  constructor(elementId, title, columns, datas) {
-    this.elementId = elementId;
-    this.title = title;
-    this.columns = columns;
-    this.datas = datas;
-    this.chart = echarts.init(document.getElementById(this.elementId));
-  }
+export async function createPieChart(elementId, title, columns, datas) {
+    const chart = echarts.init(document.getElementById(elementId));
 
-  createChart() {
     const options = {
-      title: {
-        text: this.title,
-        left: "center",
-        textStyle: {
-          fontSize: 18,
-          fontWeight: "bold",
+        title: {
+            text: title,
+            left: "center",
+            textStyle: {
+                fontSize: 18,
+                fontWeight: "bold",
+            },
+        },       
+
+        tooltip: {
+            trigger: "item",
+            textStyle: {
+                fontSize: 18,
+                fontWeight: "bold",
+            },
         },
-      },
-      tooltip: {
-        trigger: "item",
-        textStyle: {
-          fontSize: 18,
-          fontWeight: "bold",
-        },
-      },
+
       legend: {
         orient: "vertical",
         left: "right",
@@ -35,29 +30,41 @@ export class PieChart {
           fontWeight: "bold",
         },
       },
+      
       series: [
         {
-          name: this.columns[1],
+          name: columns[1],
           type: "pie",
           radius: "50%",
-          data: this.datas.map((item) => ({ name: item[0], value: item[1] })),
-        },
-      ],
-      emphasis: {
-        itemStyle: {
-          shadowBlur: 10,
-          shadowOffsetX: 0,
-          shadowColor: "rgba(0, 0, 0, 0.5)",
-        },
-      },
+          data: datas.map((item) => ({ name: item[0], value: item[1] })),
+          emphasis: {
+            itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: "rgba(0, 0, 0, 0.5)",
+              },
+            },
+          },
+        ],
     };
 
-    this.chart.setOption(options);
-  }
+    chart.setOption(options);
 
-  //Método para atualizar os dados dinamicamente
-  updateChart(newDatas) {
-    this.datas = newDatas;
-    this.createChart();
-  }
-}
+    // //  Evento de clique
+    // chart.on('click', function (params) {
+    //     const container = document.getElementById('interaction-output');
+    //     if (!document.getElementById(`info-${params.name}`)) {
+    //       const p = document.createElement('p');
+    //       p.id = `info-${params.name}`;
+    //       p.textContent = `Você clicou em: ${params.name} (${params.value})`;
+    //       container.appendChild(p);
+    //     }
+    // });
+
+    chart.on("click", function (params) {
+      const notaSelecionada = params.name;
+      atualizarTabelaPorNota(notaSelecionada);
+    });
+
+    return chart;
+};

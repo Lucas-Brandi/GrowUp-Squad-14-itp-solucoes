@@ -1,17 +1,14 @@
-export class BarChart {
-    constructor(elementId, title, columns, datas) {
-    this.elementId = elementId;
-    this.title = title;
-    this.columns = columns;
-    this.datas = datas;
-    this.chart = echarts.init(document.getElementById(this.elementId));
+export function createBarChart(elementId, chartTitle, columns, chartData) {
+    const chartElement = document.getElementById(elementId);
+    if (!chartElement) {
+        console.error(`[createBarChart] Elemento HTML com ID '${elementId}' não encontrado.`);
+        return null; // Retorna null se o elemento não for encontrado
     }
+    const chart = echarts.init(chartElement);
 
-  //Método para criar o gráfico
-    createChart() {
-        const options = {
+    const options = {
         title: {
-            text: this.title,
+            text: chartTitle,
             left: "center",
             textStyle: {
                 fontSize: 18,
@@ -19,33 +16,41 @@ export class BarChart {
             },
         },
         tooltip: {
-            trigger: "item",
+            trigger: "axis", 
             axisPointer: { type: "shadow" },
+        },
+        grid: { // Ajuste a grade para melhor visualização dos labels do eixo X
+            left: '3%',
+            right: '4%',
+            bottom: '15%', // Aumentado para dar espaço para labels rotacionados
+            containLabel: true
         },
         xAxis: {
             type: "category",
-            data: this.datas.map((item) => item[0]),
+            data: chartData.map((item) => item[0]), 
             axisLabel: {
+                rotate: 45,
+                interval: 0, 
                 textStyle: {
-                fontSize: 15 // 👈 tamanho da fonte dos rótulos do eixo Y
+                    fontSize: 12
                 }
             }
         },
-        yAxis: { type: "value" },
-        series: this.columns.slice(1).map((column, index) => ({
-            name: column,
-            type: "bar",
-            data: this.datas.map((item) => item[index + 1]),
-            label: { show: true, position: "top" },
+        yAxis: {
+            type: "value",
+            name: columns && columns.length > 1 ? columns[1] : 'Valor' 
+        },
+        series: (columns && columns.length > 1 ? columns.slice(1) : ['']) 
+            .map((columnName, index) => ({
+                name: columnName || (columns && columns.length === 1 ? columns[0] : chartTitle),
+                type: "bar",
+                barWidth: '60%', 
+                data: chartData.map((item) => item[index + 1]), 
+                label: { show: true, position: "top" }, // Mostrar valor no topo da barra
         })),
-        };
+    };
 
-        this.chart.setOption(options);
-    }
+    chart.setOption(options);
 
-    //Método para atualizar os dados dinamicamente
-    updateChart(newDatas) {
-        this.datas = newDatas;
-        this.createChart();
-    }
+    return chart; 
 }

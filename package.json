@@ -5,9 +5,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon src/server/app.js",
-    "start": "node src/server/app.js",
-    "install": "npm i"
+    "dev": "npm i && npm install -g nodemon",
+    "start": "nodemon src/server/app.js"
   },
   "keywords": [
     "dashboard",
